@@ -21,6 +21,7 @@ export function GeneratorWorkspace({ externalPrompt }: GeneratorWorkspaceProps) 
   const [isSaved, setIsSaved] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [credits, setCredits] = useState<number | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const supabase = createClient();
 
