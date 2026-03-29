@@ -6,6 +6,7 @@ import { motion, useInView } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { loadStripe } from '@stripe/stripe-js';
 import toast from 'react-hot-toast';
+import { createClient } from '@/utils/supabase/client';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_dummy');
 
@@ -56,17 +57,27 @@ const plans = [
   },
 ];
 
-export function PricingSection() {
+export function PricingSection({ onOpenAuth }: { onOpenAuth?: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [mounted, setMounted] = useState(false);
   const [isAnnual, setIsAnnual] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     setMounted(true);
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
   }, []);
 
   const handlePayment = async (plan: any) => {
+    if (!user) {
+      if (onOpenAuth) onOpenAuth();
+      return;
+    }
+
     if (plan.name === 'Free') {
        toast.success('You are already on the Free plan!');
        return;
@@ -96,7 +107,12 @@ export function PricingSection() {
       }
     } catch (err: any) {
       console.error(err);
-      toast.error(err.message === 'Unauthorized' ? 'Please log in to subscribe.' : 'Checkout failed.', { id: toastId });
+      if (err.message === 'Unauthorized' && onOpenAuth) {
+        toast.dismiss(toastId);
+        onOpenAuth();
+      } else {
+        toast.error('Checkout failed. ' + err.message, { id: toastId });
+      }
     }
   };
 

@@ -33,7 +33,7 @@ export default function Home() {
         <GeneratorWorkspace externalPrompt={promptValue} />
         <FeaturesSection />
         <GallerySection />
-        <PricingSection />
+        <PricingSection onOpenAuth={handleOpenAuth} />
         <CommunitySection />
       </main>
       <Footer />
