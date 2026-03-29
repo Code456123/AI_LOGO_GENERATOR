@@ -1,0 +1,5 @@
+﻿src/components/logoforge/AuthModal.tsx(93,6): error TS2304: Cannot find name 'AnimatePresence'.
+src/components/logoforge/AuthModal.tsx(97,12): error TS2552: Cannot find name 'motion'. Did you mean 'Option'?
+src/components/logoforge/AuthModal.tsx(106,12): error TS2552: Cannot find name 'motion'. Did you mean 'Option'?
+src/components/logoforge/AuthModal.tsx(320,13): error TS2552: Cannot find name 'motion'. Did you mean 'Option'?
+src/components/logoforge/AuthModal.tsx(323,7): error TS2304: Cannot find name 'AnimatePresence'.
