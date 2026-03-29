@@ -12,7 +12,7 @@ interface AuthModalProps {
   onClose: () => void;
 }
 
-type AuthTab = 'login' | 'signup';
+type AuthTab = 'login' | 'signup' | 'forgot_password';
 
 export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [activeTab, setActiveTab] = useState<AuthTab>('login');
@@ -73,6 +73,22 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     } else {
       toast.success('Successfully signed up! Please check your email to verify if required.');
       onClose();
+    }
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/update-password`,
+    });
+    
+    setIsLoading(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success('Password reset link sent! Check your email.');
+      handleTabChange('login');
     }
   };
 
@@ -157,6 +173,18 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   </button>
                 </div>
 
+                {/* Forgot Password Link Back */}
+                {activeTab === 'forgot_password' && (
+                  <div className="mb-6">
+                    <button
+                      onClick={() => handleTabChange('login')}
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
+                    >
+                      &larr; Back to login
+                    </button>
+                  </div>
+                )}
+
                 {/* Login Form */}
                 {activeTab === 'login' && (
                   <form className="space-y-4" onSubmit={handleLogin}>
@@ -199,9 +227,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         />
                         <span className="text-sm text-muted-foreground">Remember me</span>
                       </label>
-                      <a href="#" className="text-sm text-violet-400 hover:text-violet-300 transition-colors">
+                      <button
+                        type="button"
+                        onClick={() => handleTabChange('forgot_password')}
+                        className="text-sm text-violet-400 hover:text-violet-300 transition-colors"
+                      >
                         Forgot password?
-                      </a>
+                      </button>
                     </div>
                     <button
                       type="submit"
@@ -209,6 +241,33 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 text-white font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed glow-purple"
                     >
                       {isLoading ? 'Signing In...' : 'Sign In'}
+                    </button>
+                  </form>
+                )}
+
+                {/* Forgot Password Form */}
+                {activeTab === 'forgot_password' && (
+                  <form className="space-y-4" onSubmit={handleForgotPassword}>
+                    <div className="text-sm text-muted-foreground mb-4">
+                      Enter your email address and we'll send you a link to reset your password.
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Email</label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        placeholder="you@example.com"
+                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 transition-all"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 text-white font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed glow-purple"
+                    >
+                      {isLoading ? 'Sending Link...' : 'Send Reset Link'}
                     </button>
                   </form>
                 )}
