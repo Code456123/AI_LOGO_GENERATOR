@@ -16,7 +16,7 @@ const plans = [
     price: { monthly: 0, annual: 0 },
     description: 'Perfect for trying out LogoForge',
     features: [
-      '5 logo generations per month',
+      '2 free logo generations',
       'PNG downloads',
       'Basic styles',
       'Community gallery access',

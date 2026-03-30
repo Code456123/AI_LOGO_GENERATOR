@@ -104,6 +104,11 @@ export function GeneratorWorkspace({ externalPrompt }: GeneratorWorkspaceProps) 
     } catch (error: any) {
       console.error(error);
       toast.error(error.message || 'Generation failed');
+      if (error.message?.includes('Not enough credits') || error.message?.includes('Insufficient Credits')) {
+        setTimeout(() => {
+          document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+        }, 800);
+      }
     } finally {
       setIsGenerating(false);
     }
