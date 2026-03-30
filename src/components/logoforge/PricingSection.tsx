@@ -62,17 +62,15 @@ export function PricingSection({ onOpenAuth }: { onOpenAuth?: () => void }) {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [mounted, setMounted] = useState(false);
   const [isAnnual, setIsAnnual] = useState(false);
-  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     setMounted(true);
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
   }, []);
 
   const handlePayment = async (plan: any) => {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
     if (!user) {
       if (onOpenAuth) onOpenAuth();
       return;
