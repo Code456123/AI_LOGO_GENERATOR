@@ -6,4 +6,5 @@ export { PricingSection } from './PricingSection';
 export { CommunitySection } from './CommunitySection';
 export { Footer } from './Footer';
 export { AuthModal } from './AuthModal';
-export * from './GeneratorWorkspace';  
+export * from './GeneratorWorkspace';
+export { BrandPresentation } from './BrandPresentation';

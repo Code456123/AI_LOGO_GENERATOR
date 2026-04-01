@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { createClient } from '@/utils/supabase/client';
 import toast from 'react-hot-toast';
+import { BrandPresentation } from './BrandPresentation';
 
 interface GeneratorWorkspaceProps {
   externalPrompt?: string;
@@ -426,6 +427,11 @@ export function GeneratorWorkspace({ externalPrompt, onOpenAuth }: GeneratorWork
             )}
           </div>
         </div>
+
+        {/* Brand Presentation Section */}
+        {generatedImage && (
+          <BrandPresentation logoUrl={generatedImage} />
+        )}
       </div>
     </section>
   );
