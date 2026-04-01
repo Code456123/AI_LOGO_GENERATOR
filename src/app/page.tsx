@@ -30,7 +30,7 @@ export default function Home() {
       <Header onOpenAuth={handleOpenAuth} />
       <main>
         <HeroSection onPromptChange={handlePromptChange} />
-        <GeneratorWorkspace externalPrompt={promptValue} />
+        <GeneratorWorkspace externalPrompt={promptValue} onOpenAuth={handleOpenAuth} />
         <FeaturesSection />
         <GallerySection />
         <PricingSection onOpenAuth={handleOpenAuth} />

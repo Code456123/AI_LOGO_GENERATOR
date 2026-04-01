@@ -9,9 +9,10 @@ import toast from 'react-hot-toast';
 
 interface GeneratorWorkspaceProps {
   externalPrompt?: string;
+  onOpenAuth?: () => void;
 }
 
-export function GeneratorWorkspace({ externalPrompt }: GeneratorWorkspaceProps) {
+export function GeneratorWorkspace({ externalPrompt, onOpenAuth }: GeneratorWorkspaceProps) {
   const [tab, setTab] = useState<'text2img' | 'img2img'>('text2img');
   const [prompt, setPrompt] = useState(externalPrompt || '');
   const [aspectRatio, setAspectRatio] = useState('Square (1:1)');
@@ -60,6 +61,23 @@ export function GeneratorWorkspace({ externalPrompt }: GeneratorWorkspaceProps) 
 
   const handleGenerate = async () => {
     if (!prompt) return;
+    
+    if (!user) {
+      toast('Welcome! Please sign in to start generating your logos.', {
+        icon: '👋',
+        style: {
+          borderRadius: '12px',
+          background: '#18181b',
+          color: '#fff',
+          border: '1px solid rgba(255,255,255,0.1)'
+        },
+      });
+      if (onOpenAuth) {
+        setTimeout(onOpenAuth, 500); // Small delay to let user read the toast
+      }
+      return;
+    }
+
     setIsGenerating(true);
     
     try {
